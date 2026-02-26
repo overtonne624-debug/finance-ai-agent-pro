@@ -1,8 +1,27 @@
 import os
 import streamlit as st
 import yfinance as yf
+import plotly.graph_objects as go
 from groq import Groq
 from dotenv import load_dotenv
+def plot_stock_chart(data, ticker):
+    fig = go.Figure()
+
+    fig.add_trace(go.Scatter(
+        x=data.index,
+        y=data["Close"],
+        mode="lines",
+        name="Close Price"
+    ))
+
+    fig.update_layout(
+        title=f"{ticker} Stock Price",
+        xaxis_title="Date",
+        yaxis_title="Price (USD)",
+        template="plotly_white"
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
 st.set_page_config(
     page_title="Finance AI Agent Pro",
     page_icon="💰",
@@ -19,6 +38,7 @@ st.title("💰 Finance AI Agent Pro")
 
 def get_stock_price(symbol):
     stock = yf.Ticker(symbol)
+    plot_stock_chart(data, ticker)
     data = stock.history(period="1d")
     if not data.empty:
         return data["Close"].iloc[-1]
