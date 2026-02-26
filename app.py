@@ -112,6 +112,17 @@ if st.button("Analyze Portfolio"):
             st.error("Invalid format. Use: STOCK:QTY")
         else:
             st.success(f"💰 Total Portfolio Value: ${total:.2f}")
+            st.subheader("📊 Stock Charts")
+
+            items = portfolio_input.split(",")
+
+            for item in items:
+                symbol = item.split(":")[0].strip()
+                stock = yf.Ticker(symbol)
+                data = stock.history(period="1mo")
+
+                if not data.empty:
+                    plot_stock_chart(data, symbol)
 
             st.write("### 📋 Breakdown")
             for d in details:
