@@ -30,7 +30,9 @@ st.set_page_config(
 
 load_dotenv()
 
-client = Groq(api_key=st.secrets["GROQ_API_KEY"])
+import os
+
+client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 st.title("💰 Finance AI Agent Pro")
 
